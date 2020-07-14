@@ -15,7 +15,9 @@ import SelectPanel from "react-native-select-panel";
 
 // ...
 
-const result = await SelectPanel.open();
+const files = await SelectPanel.open();
+
+const file = await SelectPanel.save();
 ```
 
 ## Contributing
