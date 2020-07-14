@@ -2,43 +2,97 @@
 
 @implementation SelectPanel
 
+NSOpenPanel *openPanel;
+NSSavePanel *savePanel;
+
 RCT_EXPORT_MODULE()
 
-// Example method
-// See // https://facebook.github.io/react-native/docs/native-modules-ios
 RCT_REMAP_METHOD(open,
                  openPanelWithOptions:(nonnull NSDictionary*)options
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 {
 	dispatch_sync(dispatch_get_main_queue(), ^{
-		[self openPanelWithOptions:options];
+		[self openPanelWithOptions:options withCallback:^(NSArray *files) {
+			if(files == nil){
+				NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"operate canceld"}];
+				reject(@"canceld", @"operate canceld", error);
+			}else{
+				resolve(files);
+			}
+		}];
 	});
-
-  //resolve(result);
 }
 
--(void)openPanelWithOptions: (NSDictionary*) options{
-	if(!panel){
-		panel = [NSOpenPanel openPanel];
+RCT_REMAP_METHOD(save,
+                 savePanelWithOptions:(nonnull NSDictionary*)options
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+{
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[self savePanelWithOptions:options withCallback:^(NSString *file) {
+			if(file == nil){
+				NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"operate canceld"}];
+				reject(@"canceld", @"operate canceld", error);
+			}else{
+				resolve(file);
+			}
+		}];
+	});
+}
+
+-(void)openPanelWithOptions: (NSDictionary*) options withCallback: (void (^)(NSArray* files)) block{
+	if(!openPanel){
+		openPanel = [NSOpenPanel openPanel];
 	}
 	
 	for (id key in options)
 	{
 		SEL selector = NSSelectorFromString(key);
-		if ([panel respondsToSelector:selector]) {
+		if ([openPanel respondsToSelector:selector]) {
 			id value = options[key];
 			NSLog(@"%@ %@", key, value);
 			
-			[panel setValue:value forKey:key];
+			[openPanel setValue:value forKey:key];
 		}
 	}
-
-	[panel beginSheetModalForWindow:[NSApp mainWindow] completionHandler:^(NSModalResponse result) {
+	
+	[openPanel beginSheetModalForWindow:[NSApp mainWindow] completionHandler:^(NSModalResponse result) {
 		if (result == NSModalResponseOK) {
-			for (NSURL *url in [panel URLs]) {
+			NSArray *files = [[NSArray alloc]init];
+			for (NSURL *url in [openPanel URLs]) {
 				NSLog(@"--->%@",url);
+				files = [files arrayByAddingObject:url.path];
 			}
+			block(files);
+		}else if (result == NSModalResponseCancel) {
+			block(nil);
+		}
+	}];
+}
+
+-(void)savePanelWithOptions: (NSDictionary*) options withCallback: (void (^)(NSString *file)) block{
+	if(!savePanel){
+		savePanel = [NSOpenPanel openPanel];
+		[savePanel setCanCreateDirectories:NO];
+	}
+	
+	for (id key in options)
+	{
+		SEL selector = NSSelectorFromString(key);
+		if ([savePanel respondsToSelector:selector]) {
+			id value = options[key];
+			NSLog(@"%@ %@", key, value);
+			
+			[savePanel setValue:value forKey:key];
+		}
+	}
+	
+	[savePanel beginSheetModalForWindow:[NSApp mainWindow] completionHandler:^(NSModalResponse result) {
+		if (result == NSModalResponseOK) {
+			block([savePanel URL].path);
+		}else if (result == NSModalResponseCancel) {
+			block(nil);
 		}
 	}];
 }
