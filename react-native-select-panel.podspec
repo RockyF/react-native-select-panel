@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "9.0", osx => "10.14" }
+  s.platforms    = { :ios => "9.0", :osx => "10.14" }
   s.source       = { :git => "https://github.com/RockyF/react-native-select-panel.git", :tag => "#{s.version}" }
 
 
