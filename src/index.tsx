@@ -17,8 +17,6 @@ interface SaveOptions {
 }
 
 interface OpenOptions extends SaveOptions{
-	message: string;
-	prompt: string;
 	canChooseFiles: boolean;
 	canChooseDirectories: boolean;
 	allowsMultipleSelection: boolean;
