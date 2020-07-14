@@ -3,10 +3,10 @@ import { StyleSheet, View, Text } from 'react-native';
 import SelectPanel from 'react-native-select-panel';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [result, setResult] = React.useState<string[] | undefined>();
 
   React.useEffect(() => {
-    SelectPanel.multiply(3, 7).then(setResult);
+    SelectPanel.open().then(setResult);
   }, []);
 
   return (

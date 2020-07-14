@@ -9,7 +9,7 @@ type OpenOptions = {
 }
 
 type SelectPanelType = {
-  open(options: OpenOptions): Promise<string []>;
+  open(options?: OpenOptions): Promise<string []>;
 };
 
 const { SelectPanel } = NativeModules;

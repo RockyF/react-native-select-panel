@@ -15,7 +15,7 @@ import SelectPanel from "react-native-select-panel";
 
 // ...
 
-const result = await SelectPanel.multiply(3, 7);
+const result = await SelectPanel.open();
 ```
 
 ## Contributing
