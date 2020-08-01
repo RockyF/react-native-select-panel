@@ -1,26 +1,26 @@
 import {NativeModules} from 'react-native';
 
 interface SaveOptions {
-	message: string;
-	prompt: string;
-	nameFieldLabel: string;
-	canCreateDirectories: boolean;
-	canSelectHiddenExtension: boolean;
-	treatsFilePackagesAsDirectories: boolean;
-	showsHiddenFiles: boolean;
-	showsTagField: boolean;
-	tagNames: string[];
-	allowedFileTypes: string[];
-	allowsOtherFileTypes: boolean;
-	canResolveUbiquitousConflicts: boolean;
-	canDownloadUbiquitousContents: boolean;
+	message?: string;
+	prompt?: string;
+	nameFieldLabel?: string;
+	canCreateDirectories?: boolean;
+	canSelectHiddenExtension?: boolean;
+	treatsFilePackagesAsDirectories?: boolean;
+	showsHiddenFiles?: boolean;
+	showsTagField?: boolean;
+	tagNames?: string[];
+	allowedFileTypes?: string[];
+	allowsOtherFileTypes?: boolean;
+	canResolveUbiquitousConflicts?: boolean;
+	canDownloadUbiquitousContents?: boolean;
 }
 
 interface OpenOptions extends SaveOptions{
-	canChooseFiles: boolean;
-	canChooseDirectories: boolean;
-	allowsMultipleSelection: boolean;
-	resolvesAliases: boolean;
+	canChooseFiles?: boolean;
+	canChooseDirectories?: boolean;
+	allowsMultipleSelection?: boolean;
+	resolvesAliases?: boolean;
 }
 
 type SelectPanelType = {
